@@ -1,5 +1,6 @@
-import logging, environ, psycopg2, pathlib , ollama
-import google.generativeai as genai
+import logging, environ, pathlib
+from langchain_ollama import OllamaEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -12,7 +13,6 @@ base_dir = pathlib.Path(__file__).parent.parent
 environ.Env.read_env(base_dir / ".env")
 
 # Initialize the Google Generative AI client and Database
-genai.configure(api_key=env("api_key"))
 EMBEDDING_MODEL_NAME = env("EMBEDDING_MODEL_NAME")
 
 class EmbeddingConfig:
@@ -22,17 +22,25 @@ class EmbeddingConfig:
     
     def __call__(self, text: str) -> list[float]:
         if self.embedding_model_type == "google":
-            return self.get_text_embedding(text, self.embedding_model_name, genai)
+            return self.get_text_embedding(text, self.embedding_model_name)
         elif self.embedding_model_type == "ollama":
             return self.get_text_embedding_ollama(text, self.embedding_model_name)
+    
+    def get_embedding_model(self):
+        if self.embedding_model_type == "google":
+            return GoogleGenerativeAIEmbeddings(model=self.embedding_model_name, api_key=env("api_key"))
+        elif self.embedding_model_type == "ollama":
+            return OllamaEmbeddings(model=self.embedding_model_name, base_url=env("OLLAMA_BASE_URL"))
+        else:
+            raise ValueError("Invalid embedding model type")
 
-
-    def get_text_embedding(self,text: str, EMBEDDING_MODEL_NAME, genai) -> list[float]:
+    def get_text_embedding(self,text: str, EMBEDDING_MODEL_NAME) -> list[float]:
         if not text:
             return []
         try:
-            embedding_result = genai.embed_content(model=EMBEDDING_MODEL_NAME, content=text)
-            return embedding_result["embedding"]
+            embedding = GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL_NAME, api_key=env("api_key"))
+            embedding_result = embedding.embed_query(text=text)
+            return embedding_result
         except Exception as e:
             logger.error(f"Embedding Error: sleep for 60 seconds")
             import time
@@ -46,13 +54,16 @@ class EmbeddingConfig:
             return []
 
         try:
-            response = ollama.embeddings(
+            response = OllamaEmbeddings(
                 model=model,
-                prompt=text,
+                base_url=env("OLLAMA_BASE_URL"),
+                
             )
-            return response["embedding"]
+            return response.embed_query(text)
 
         except Exception as e:
             logger.error(f"Ollama embedding error: {e}", exc_info=True)
             return []
+    
+    
 
