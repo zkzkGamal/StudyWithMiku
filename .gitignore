@@ -2,4 +2,6 @@
 *.pyc
 __pycache__/
 venv/
-DiffSinger/
+DiffSinger
+models/vocoder
+data/*
