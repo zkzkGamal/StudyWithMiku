@@ -15,3 +15,7 @@ scipy
 TTS
 pyttsx3
 ddgs
+chromadb
+langgraph
+chromadb-client
+langchain-chroma

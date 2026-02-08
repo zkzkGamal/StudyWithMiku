@@ -105,5 +105,6 @@ except Exception as e:
 EOF
 
 echo "🎉 Install + Test Complete!"
+source venv/bin/activate
 echo "Activate venv: source venv/bin/activate"
 echo "Note: For new terminals, source ~/.bashrc to apply PYTHONPATH changes."
