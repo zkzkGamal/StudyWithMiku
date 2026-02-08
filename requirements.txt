@@ -1,21 +1,31 @@
+# Core LangChain packages
 langchain
-langgraph
 langchain-ollama
 langchain-openai
 langchain-google-genai
 langchain-core
+
+# LangGraph
+langgraph
+
+# Chroma / Vector DB
+chromadb
+chromadb-client
+langchain-chroma
+
+# Utilities
 pydantic
 typing-extensions
+numpy
+scipy
+
+# Audio / TTS / Speech
 openai-whisper
 webrtcvad
 sounddevice
-numpy
 noisereduce
-scipy
-TTS
+coqui-tts
 pyttsx3
+
+# Web / Search
 ddgs
-chromadb
-langgraph
-chromadb-client
-langchain-chroma

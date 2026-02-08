@@ -21,7 +21,7 @@ MODEL_TTS_TYPE = env("MODEL_TTS_TYPE" , default="tts")
 import DiffSinger.utils.hparams as hs
 from DiffSinger.inference.ds_variance import DiffSingerVarianceInfer  # Adjust based on actual module
 
-class TTS:
+class TTS_INSTANCE:
     def __init__(self):
         if MODEL_TTS_TYPE == "tts":
             self.tts = TTS(MODEL_TTS_NAME, progress_bar=False, gpu=True)
