@@ -70,18 +70,23 @@ StudyWithMiku/
 ├── voices/                   # Voice model files
 ├── prompt.yaml               # System prompt configuration
 ├── requirements.txt          # Python dependencies
-└── install.sh                # Smart installer script
+├── requirements.txt           # Python dependencies
+└── install.sh                 # Smart installer script
 ```
 
 ## 📦 Installation
 
 ### Prerequisites
 
-- Python 3.8+
-- CUDA-compatible GPU (recommended for TTS)
-- Ubuntu/Linux (tested on Ubuntu)
+- **Operating System**: Ubuntu/Linux (tested on Ubuntu 20.04+)
+- **Python**: 3.8 or higher
+- **GPU**: CUDA-compatible GPU recommended (for TTS and faster inference)
+- **Disk Space**: ~2GB for dependencies and models
+- **Internet**: Required for downloading dependencies and models
 
-### Quick Install
+### Automated Installation (Recommended)
+
+The installer script handles everything automatically - just run it and follow the prompts!
 
 1. **Clone the repository**:
 
@@ -90,28 +95,123 @@ git clone <your-repo-url>
 cd StudyWithMiku
 ```
 
-2. **Run the smart installer**:
+2. **Run the automated installer**:
 
 ```bash
 chmod +x install.sh
 ./install.sh
 ```
 
-The installer will:
+**The installer will automatically:**
 
-- Create a virtual environment
-- Install PyTorch with CUDA support
-- Install all Python dependencies
-- Clone DiffSinger repository
-- Download NSF-HiFiGAN vocoder model
-- Configure PYTHONPATH
-- Run import tests
+- ✅ Check and install system dependencies (python3, git, curl, unzip, etc.)
+- ✅ Create and activate a Python virtual environment
+- ✅ Upgrade pip, setuptools, and wheel
+- ✅ Install PyTorch with CUDA 11.8 support
+- ✅ Install all Python dependencies from requirements.txt
+- ✅ Clone the DiffSinger repository
+- ✅ Install DiffSinger dependencies and fix conflicts
+- ✅ Configure PYTHONPATH in ~/.bashrc
+- ✅ Download NSF-HiFiGAN vocoder model (~93MB)
+- ✅ Create .env file from .env.example
+- ✅ Create content/ and data/ directories
+- ✅ Verify all installations with dependency tests
+- ✅ Optionally launch the application immediately
 
-3. **Configure environment variables**:
+**Installation Progress:**
+
+```
+╔════════════════════════════════════════════════╗
+║   🎤 StudyWithMiku - Automated Installer 🎤   ║
+╚════════════════════════════════════════════════╝
+
+[1/10] Checking system dependencies...
+[2/10] Setting up virtual environment...
+[3/10] Installing PyTorch...
+[4/10] Installing project dependencies...
+[5/10] Setting up DiffSinger...
+[6/10] Installing DiffSinger dependencies...
+[7/10] Configuring PYTHONPATH...
+[8/10] Downloading vocoder model...
+[9/10] Configuring environment variables...
+[10/10] Verifying installation...
+
+╔════════════════════════════════════════════════╗
+║          🎉 Installation Complete! 🎉         ║
+╚════════════════════════════════════════════════╝
+```
+
+3. **Configure your environment**:
+
+```bash
+nano .env  # Edit with your LLM provider settings
+```
+
+4. **Start the application**:
+
+```bash
+source venv/bin/activate
+python main.py
+```
+
+### Manual Installation
+
+If you prefer manual control or the automated installer fails:
+
+1. **Install system dependencies**:
+
+```bash
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip git curl unzip
+```
+
+2. **Create virtual environment**:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip setuptools wheel
+```
+
+3. **Install PyTorch**:
+
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+
+4. **Install dependencies**:
+
+```bash
+pip install -r requirements.txt
+```
+
+5. **Setup DiffSinger**:
+
+```bash
+git clone https://github.com/openvpi/DiffSinger.git
+cd DiffSinger
+pip install -r requirements.txt
+pip install librosa==0.10.0 protobuf==3.19.5 --force-reinstall
+cd ..
+export PYTHONPATH=$PYTHONPATH:$(pwd)/DiffSinger
+echo "export PYTHONPATH=\$PYTHONPATH:$(pwd)/DiffSinger" >> ~/.bashrc
+```
+
+6. **Download vocoder model**:
+
+```bash
+mkdir -p models/vocoder
+cd models/vocoder
+curl -L -o nsf_hifigan_20221211.zip https://github.com/openvpi/vocoders/releases/download/nsf-hifigan-v1/nsf_hifigan_20221211.zip
+unzip nsf_hifigan_20221211.zip
+cd ../..
+```
+
+7. **Configure environment**:
 
 ```bash
 cp .env.example .env
-nano .env  # Edit with your settings
+nano .env
 ```
 
 ### Environment Variables
