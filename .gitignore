@@ -5,3 +5,5 @@ venv/
 DiffSinger
 models/vocoder
 data/*
+logs/
+content/

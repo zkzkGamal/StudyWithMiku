@@ -49,6 +49,7 @@ class LLM:
         else:
             raise ValueError("Invalid model type")
         
+    def initialize(self):
         return self.model
     
     

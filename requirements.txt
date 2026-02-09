@@ -29,3 +29,7 @@ pyttsx3
 
 # Web / Search
 ddgs
+
+# Threading / observers
+asyncio
+watchdog
