@@ -7,12 +7,22 @@ logger = logging.getLogger(__name__)
 
 @tool
 def embedded_pdf(pdf_path: str) -> str:
-    """Embedded PDF content into the vector store. Returns a process id of the pdf file."""
+    """Run PDF embedding in background and return process ID."""
     try:
-        from handlation.pdf_handlation import embedded_pdf as embed_func
-        process = multiprocessing.Process(target=embed_func, args=(pdf_path,))
+        from handlation.pdf_handlation import embed_pdf_worker  # <-- renamed function
+
+        logger.info(f"[TOOL] Launching background process for {pdf_path}")
+
+        process = multiprocessing.Process(
+            target=embed_pdf_worker,
+            args=(pdf_path,)
+        )
         process.start()
-        return f"Background process started with PID: {process.pid}"
+
+        logger.info(f"[TOOL] Background process started with PID: {process.pid}")
+
+        return f"Background embedding started with PID: {process.pid}"
+
     except Exception as e:
-        logger.error(f"[TOOL] Embedded PDF error: {e}")
+        logger.exception(f"[TOOL] Embedded PDF error")
         return f"Error starting background process: {e}"

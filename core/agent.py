@@ -48,12 +48,6 @@ def call_model(state: AgentState):
 
     # Debug logging for context tracking
     logger.info(f"[AGENT] Processing with {len(messages)} messages in context")
-    if len(messages) > 1:
-        last_msg = messages[-1]
-        if hasattr(last_msg, "content"):
-            logger.info(
-                f"[AGENT] Last message: {last_msg.content[:100]}..."
-            )  # First 100 chars
 
     # 1. Normal AI Invocation
     # Lazy load the model chain if not ready
