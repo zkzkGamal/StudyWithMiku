@@ -436,9 +436,7 @@ Contributions are welcome! Please:
 - **ChromaDB**: Embedding database
 
 ## 📧 Contact
-
-[Your contact information]
-
+mailto:zekogml11@gmail.com
 ---
 
 **Made with ❤️ by the zkzk** 🎤✨
